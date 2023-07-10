@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/services.dart' show rootBundle;
 
 // New Page widget
 class ArticlePage extends StatefulWidget {
@@ -32,7 +31,6 @@ class ArticlePageState extends State<ArticlePage> {
   Duration totalDuration = const Duration(milliseconds: 0);
   StreamSubscription<Duration>? positionSubscription;
   StreamSubscription<Duration>? durationSubscription;
-  String paragraph = "";
   List<TextSpan> textSpans = [];
   List<double> speeds = [1.0, 1.25, 1.5];
   int selectedButton = 0;
@@ -51,13 +49,18 @@ class ArticlePageState extends State<ArticlePage> {
   }
 
   Future<void> initializeSentences() async {
-    final String fileData = await rootBundle.loadString('assets/subtitles/audio${widget.imageIndex}.txt');
+    String fileData;
+    final response = await http.get(Uri.parse('https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/subtitles/audio${widget.imageIndex}.txt'));
+
+    if (response.statusCode == 200) {
+      fileData = response.body;
+    } else {
+      throw Exception('Failed to load subtitle data');
+    }
+
     List<String> lines = fileData.split('\n').where((line) => line.trim().isNotEmpty).toList();;
 
     for (int i = 1; i < lines.length - 1; i += 2){ // start from the second line
-      if (kDebugMode) {
-        print('lines[$i]: ${lines[i]}');
-      }
       List<String> timestamps = lines[i].split(' ');
       if (kDebugMode) {
         print('timestamps: $timestamps');
@@ -94,9 +97,9 @@ class ArticlePageState extends State<ArticlePage> {
   void initializeAudio() async {
     await initializeSentences();
 
-    String audioPath = 'audio/audio${widget.imageIndex}.mp3';
+    String audioURL = 'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/audios/audio${widget.imageIndex}.mp3';
     if (kDebugMode) {
-      print("audioPath: $audioPath");
+      print('audioURL: $audioURL');
     }
 
     positionSubscription = player.onPositionChanged.listen((Duration p) {
@@ -134,7 +137,7 @@ class ArticlePageState extends State<ArticlePage> {
     });
 
     // Load and start the audio
-    await player.play(AssetSource(audioPath));
+    await player.play(UrlSource(audioURL));
   }
 
   void playAudio() async {
