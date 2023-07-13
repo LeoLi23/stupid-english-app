@@ -7,7 +7,9 @@ import 'package:http/http.dart' as http;
 // New Page widget
 class ArticlePage extends StatefulWidget {
   final int imageIndex;
-  const ArticlePage({Key? key, required this.imageIndex}) : super(key: key);
+  final VoidCallback onFinished;
+
+  const ArticlePage({Key? key, required this.imageIndex, required this.onFinished}) : super(key: key);
   @override
   ArticlePageState createState() => ArticlePageState();
 }
@@ -80,7 +82,6 @@ class ArticlePageState extends State<ArticlePage> {
   int _convertTimeToMilliseconds(String timeString){
     //00:00:02:72
     List<String> parts = timeString.split(':');
-    //print('parts: $parts');
     int hours = int.parse(parts[0]);
     int minutes = int.parse(parts[1]);
     int seconds = int.parse(parts[2]);
@@ -133,6 +134,7 @@ class ArticlePageState extends State<ArticlePage> {
         });
       } else {
         player.stop();
+        widget.onFinished(); // notify that the user has finished
       }
     });
 

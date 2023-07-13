@@ -56,10 +56,22 @@
       "languageVersion": "2.17"
     },
     {
-      "name": "card_swiper",
-      "rootUri": "file:///Users/lianyang/.pub-cache/hosted/pub.dev/card_swiper-3.0.1",
+      "name": "cached_network_image",
+      "rootUri": "file:///Users/lianyang/.pub-cache/hosted/pub.dev/cached_network_image-3.2.3",
       "packageUri": "lib/",
-      "languageVersion": "2.15"
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "cached_network_image_platform_interface",
+      "rootUri": "file:///Users/lianyang/.pub-cache/hosted/pub.dev/cached_network_image_platform_interface-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "cached_network_image_web",
+      "rootUri": "file:///Users/lianyang/.pub-cache/hosted/pub.dev/cached_network_image_web-1.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
     },
     {
       "name": "characters",
@@ -114,6 +126,18 @@
       "rootUri": "file:///Users/lianyang/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "flutter_blurhash",
+      "rootUri": "file:///Users/lianyang/.pub-cache/hosted/pub.dev/flutter_blurhash-0.7.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "flutter_cache_manager",
+      "rootUri": "file:///Users/lianyang/.pub-cache/hosted/pub.dev/flutter_cache_manager-3.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "flutter_lints",
@@ -172,6 +196,12 @@
     {
       "name": "meta",
       "rootUri": "file:///Users/lianyang/.pub-cache/hosted/pub.dev/meta-1.9.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "octo_image",
+      "rootUri": "file:///Users/lianyang/.pub-cache/hosted/pub.dev/octo_image-1.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -236,6 +266,12 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "rxdart",
+      "rootUri": "file:///Users/lianyang/.pub-cache/hosted/pub.dev/rxdart-0.27.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///Users/lianyang/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -246,6 +282,18 @@
       "rootUri": "file:///Users/lianyang/.pub-cache/hosted/pub.dev/source_span-1.9.1",
       "packageUri": "lib/",
       "languageVersion": "2.14"
+    },
+    {
+      "name": "sqflite",
+      "rootUri": "file:///Users/lianyang/.pub-cache/hosted/pub.dev/sqflite-2.2.8+4",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "sqflite_common",
+      "rootUri": "file:///Users/lianyang/.pub-cache/hosted/pub.dev/sqflite_common-2.4.5+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
     },
     {
       "name": "stack_trace",
@@ -303,9 +351,9 @@
     },
     {
       "name": "win32",
-      "rootUri": "file:///Users/lianyang/.pub-cache/hosted/pub.dev/win32-5.0.5",
+      "rootUri": "file:///Users/lianyang/.pub-cache/hosted/pub.dev/win32-3.1.4",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "2.17"
     },
     {
       "name": "xdg_directories",
@@ -320,7 +368,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-07-10T21:54:11.318787Z",
+  "generated": "2023-07-12T22:24:42.784980Z",
   "generator": "pub",
   "generatorVersion": "3.0.5"
 }

@@ -1,0 +1,35 @@
+{
+    "envId": "guangzhou-2gfa4ym6a2e500c2",
+    "version": "2.0",
+    "$schema": "https://framework-1258016615.tcloudbaseapp.com/schema/latest.json",
+    "functionRoot": "./functions",
+    "functions": [
+        {
+            "name": "getLessonsCount",
+            "config": {
+                "timeout": 20,
+                "runtime": "Nodejs10.15",
+                "installDependency": true,
+                "memorySize": 256,
+                "handler": "index.main"
+            },
+            "timeout": 20,
+            "runtime": "Nodejs10.15",
+            "installDependency": true,
+            "memorySize": 256,
+            "handler": "index.main"
+        }
+    ],
+    "region": "ap-guangzhou",
+    "framework": {
+        "name": "firstFlutterApp",
+        "plugins": {
+            "function": {
+                "use": "@cloudbase/framework-plugin-function",
+                "inputs": {
+                    "functionRootPath": "./functions"
+                }
+            }
+        }
+    }
+}
