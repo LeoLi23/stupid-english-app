@@ -22,6 +22,28 @@ Future<int> getLessonsCount() async {
   }
 }
 
+class LessonImage extends StatelessWidget {
+  final String url;
+
+  const LessonImage({Key? key, required this.url}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CachedNetworkImage(
+      imageUrl: url,
+      width: 50,
+      height: 50,
+      fit: BoxFit.cover,
+      placeholder: (context, url) => const SizedBox(
+        width: 50,
+        height: 50,
+      ),
+      fadeInDuration: const Duration(milliseconds: 500),
+      errorWidget: (context, url, error) => const Icon(Icons.error),
+    );
+  }
+}
+
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
@@ -67,35 +89,32 @@ class MyHomePageState extends State<MyHomePage> {
   final lessonImages = [
     'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson1.jpg',
     'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson2.jpg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson1.jpg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson1.jpg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson1.jpg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson1.jpg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson1.jpg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson1.jpg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson1.jpg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson1.jpg',
+    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson3.jpeg',
+    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson4.jpeg',
+    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson5.jpeg',
+    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson6.jpeg',
+    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson7.jpeg',
+    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson8.jpeg',
+    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson9.jpeg',
+    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson10.jpeg',
   ];
-  
-  Future<void> cacheImages(BuildContext context) async {
+
+  Future<void> cacheImages() async {
     await precacheImage(const AssetImage('assets/images/cute_girl_after.jpg'), context);
-    for (var imageURL in lessonImages){
-      await precacheImage(NetworkImage(imageURL), context);
-    }
   }
 
-  Future<void> loadData() async {
+  Future<void> loadData(BuildContext context) async {
     lessonsCount = getLessonsCount();
     await Future.wait([
       lessonsCount,
-      cacheImages(context),
+      cacheImages(),
     ]);
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<void>(
-      future: loadData(),
+      future: loadData(context),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -242,14 +261,7 @@ class MyHomePageState extends State<MyHomePage> {
                                         contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0), // increased height
                                         leading: ClipRRect(
                                           borderRadius: BorderRadius.circular(10),
-                                          child: CachedNetworkImage(
-                                            imageUrl: lessonImages[index],
-                                            width: 50,
-                                            height: 50,
-                                            fit: BoxFit.cover,
-                                            placeholder: (context, url) => const CircularProgressIndicator(),
-                                            errorWidget: (context, url, error) => const Icon(Icons.error),
-                                          ),
+                                          child: LessonImage(url: lessonImages[index]),
                                         ),
                                         title: Text(
                                           'Lesson ${index + 1}',
