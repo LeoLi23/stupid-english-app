@@ -135,6 +135,47 @@ class ArticlePageState extends State<ArticlePage> {
       } else {
         player.stop();
         widget.onFinished(); // notify that the user has finished
+
+        // Show the dialog here
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            title: const Text('Congratulations!', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.green)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('You have successfully completed: Lesson ${widget.imageIndex}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+              ],
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Center the buttons horizontally
+                children: [
+                  TextButton(
+                    child: const Text('Close', style: TextStyle(fontSize: 20)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      widget.onFinished();
+                    },
+                  ),
+                  TextButton(
+                      child: const Text('Home Page', style: TextStyle(fontSize: 20)),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).popUntil((route) => route.isFirst);
+                        widget.onFinished();
+                      }
+                  )
+                ],
+              )
+            ],
+
+
+          )
+        );
       }
     });
 

@@ -47,7 +47,9 @@ flutter:
   assets:
     - assets/images/bg2.jpg
     - assets/images/cute_girl_after.jpg
-
+    - assets/images/clock-removed.png
+    - assets/images/micro-removed.png
+    - assets/images/book-removed.png
   fonts:
     - family: Cambria
       fonts:

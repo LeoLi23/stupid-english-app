@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'article_page.dart';
+import 'intro_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -73,6 +74,10 @@ class App extends StatelessWidget {
         ),
       ),
       home: const MyHomePage(),
+      initialRoute: '/intro',
+      routes: {
+        '/intro': (context) => IntroPage(),
+      }
     );
   }
 }
@@ -86,18 +91,6 @@ class MyHomePage extends StatefulWidget {
 class MyHomePageState extends State<MyHomePage> {
   int unlockedLesson = 1;
   late Future<int> lessonsCount;
-  final lessonImages = [
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson1.jpg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson2.jpg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson3.jpeg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson4.jpeg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson5.jpeg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson6.jpeg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson7.jpeg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson8.jpeg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson9.jpeg',
-    'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson10.jpeg',
-  ];
 
   Future<void> cacheImages() async {
     await precacheImage(const AssetImage('assets/images/cute_girl_after.jpg'), context);
@@ -178,7 +171,7 @@ class MyHomePageState extends State<MyHomePage> {
                                             letterSpacing: -1.0,
                                           )),
                                       const TextSpan(
-                                          text: ' with Audio from',
+                                          text: ' with',
                                           style: TextStyle(
                                             color: Color(0xff060B26),
                                             fontSize: 36,
@@ -212,72 +205,85 @@ class MyHomePageState extends State<MyHomePage> {
                                       return Text('${snapshot.data} Lessons', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20));
                                     }
                                   },
-                                ),
-                                FutureBuilder<int>(
-                                  future: lessonsCount,
-                                  builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-                                    if (snapshot.connectionState == ConnectionState.waiting) {
-                                      return const CircularProgressIndicator();
-                                    } else if (snapshot.hasError) {
-                                      return Text('Error: ${snapshot.error}');
-                                    } else {
-                                      return Text('${snapshot.data} Min', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20));
-                                    }
-                                  },
-                                ),
+                                )
                               ],
                             ),
                             Expanded(
-                              child: ListView.builder(
-                                itemCount: 10,
-                                itemBuilder: (context, index) {
-                                  return InkWell(
-                                    onTap: () {
-                                      if (index + 1 <= unlockedLesson) {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ArticlePage(
-                                                        imageIndex: index + 1,
-                                                        onFinished: () { // this gets called when the user finishes
-                                                          if (kDebugMode) {
-                                                            print('The user has finished');
-                                                          }
-                                                          if (index + 1 == unlockedLesson && unlockedLesson < 10) {
-                                                            setState(() {
-                                                              unlockedLesson++;
-                                                            });
-                                                          }
-                                                        }
-                                                    )));
-                                      }},
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      elevation: 2.0, // reduced shadow effect
-                                      child: ListTile(
-                                        contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0), // increased height
-                                        leading: ClipRRect(
-                                          borderRadius: BorderRadius.circular(10),
-                                          child: LessonImage(url: lessonImages[index]),
-                                        ),
-                                        title: Text(
-                                          'Lesson ${index + 1}',
-                                          style: Theme.of(context).textTheme.headline4,
-                                        ),
-                                        trailing: Icon(
-                                          index + 1 <= unlockedLesson ? Icons.lock_open : Icons.lock,
-                                          color: Colors.green[200],
-                                          size: 30.0,
-                                        ),
-                                      ),
-                                    ),
-                                  );
+                              child: FutureBuilder<int>(
+                                future: lessonsCount,
+                                builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                    return const Center(child: CircularProgressIndicator());
+                                  } else if (snapshot.hasError) {
+                                    return const Center(child: Text('Error loading lessons!'));
+                                  } else {
+                                    return ListView.builder(
+                                      itemCount: snapshot.data, // Here we use the lessons count from the future
+                                      itemBuilder: (context, index) {
+                                        //print('current index: ${index}');
+                                        return InkWell(
+                                          onTap: () {
+                                            if (index + 1 <= unlockedLesson) {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ArticlePage(
+                                                              imageIndex: index + 1,
+                                                              onFinished: () {
+                                                                if (kDebugMode) {
+                                                                  print('The user has finished');
+                                                                }
+                                                                if (index + 1 == unlockedLesson && unlockedLesson < (snapshot.data ?? 0)) { // Check against lessons count here too
+                                                                  setState(() {
+                                                                    unlockedLesson++;
+                                                                  });
+                                                                }
+                                                              }
+                                                          )));
+                                            }},
+                                          child: Card(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            elevation: 2.0,
+                                            child: ListTile(
+                                              contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+                                              leading: ClipRRect(
+                                                borderRadius: BorderRadius.circular(10),
+                                                child: LessonImage(url: 'https://stupid-english-app-1318830690.cos.ap-shanghai.myqcloud.com/images/lesson${index + 1}.jpg'), // This might need to change if you have dynamic URLs
+                                              ),
+                                              title: Text(
+                                                'Lesson ${index + 1}', // Lesson number is now dynamic
+                                                style: Theme.of(context).textTheme.headline4,
+                                              ),
+                                              trailing: index + 1 <= unlockedLesson ?
+                                              Container(
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.green, // Gold color
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: const Icon(
+                                                  Icons.play_arrow,
+                                                  color: Colors.white,
+                                                  size: 36,
+                                                ),
+                                              ) :
+                                              const Icon(
+                                                Icons.lock,
+                                                color: Colors.grey,
+                                                size: 36,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  }
                                 },
                               ),
                             ),
+
                           ],
                         ),
                       ),
